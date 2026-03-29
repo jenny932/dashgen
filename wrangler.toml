@@ -6,11 +6,6 @@ pages_build_output_dir = ".vercel/output/static"
 [vars]
 NEXT_PUBLIC_APP_NAME = "DashGen"
 FREE_GENERATION_LIMIT = "3"
-AI_PROVIDER = "openai"
-AI_MODEL = "gpt-4o"
 
-# Secrets (set via dashboard or wrangler secret put):
-# NEXT_PUBLIC_SUPABASE_URL
-# NEXT_PUBLIC_SUPABASE_ANON_KEY
-# SUPABASE_SERVICE_ROLE_KEY
-# OPENAI_API_KEY  (or ANTHROPIC_API_KEY / GEMINI_API_KEY)
+# AI vars (AI_PROVIDER, AI_MODEL, ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL)
+# are set via Cloudflare Pages Environment Variables, NOT here
