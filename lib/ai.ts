@@ -84,7 +84,8 @@ async function describeImageOpenAI(imageBase64: string, prompt: string): Promise
 
 // ── Anthropic ────────────────────────────────────────────────────────────────
 async function generateAnthropic(prompt: string): Promise<string> {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const baseUrl = process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com'
+  const res = await fetch(`${baseUrl}/v1/messages`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -103,7 +104,8 @@ async function generateAnthropic(prompt: string): Promise<string> {
 }
 
 async function describeImageAnthropic(imageBase64: string, prompt: string): Promise<string> {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const baseUrl = process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com'
+  const res = await fetch(`${baseUrl}/v1/messages`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
