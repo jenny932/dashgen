@@ -132,6 +132,13 @@ export default function PreviewPage() {
         </div>
       </div>
 
+      {generating && (
+        <div className="flex-shrink-0 bg-blue-500/10 border-b border-blue-500/20 px-5 py-2 flex items-center gap-2 text-blue-300 text-sm">
+          <Loader2 size={14} className="animate-spin" />
+          <span>AI is generating your dashboard… (refreshes every 3s)</span>
+        </div>
+      )}
+
       {/* MAIN: iframe preview OR code view */}
       {showCode ? (
         <div className="flex-1 overflow-auto bg-[#0D1117]">
