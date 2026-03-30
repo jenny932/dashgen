@@ -8,14 +8,13 @@ export function createServerSupabaseFromRequest(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set() {
-          // Edge: cookie setting handled by middleware or client
-        },
-        remove() {
-          // Edge: cookie removal handled by middleware or client
+        setAll(cookiesToSet: { name: string; value: string; options?: object }[]) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value)
+          })
         },
       },
     }

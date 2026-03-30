@@ -21,8 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   // Trigger async generation if status is 'generating'
   if (report.status === 'generating') {
-    // Fire-and-forget: kick off generation in background
-    triggerGeneration(supabase, user.id, report).catch(console.error)
+    triggerGeneration(supabase, user.id, report as Record<string, any>).catch(console.error)
   }
 
   return NextResponse.json(report)
