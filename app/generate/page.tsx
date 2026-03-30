@@ -99,9 +99,13 @@ export default function GeneratePage() {
 
     // Call AI generation API (runs on external server to bypass Cloudflare timeout)
     const genApiUrl = process.env.NEXT_PUBLIC_GENERATION_API_URL || '/api/generate'
+    const apiSecret = process.env.NEXT_PUBLIC_GENERATION_API_SECRET || ''
     const res = await fetch(genApiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(apiSecret ? { 'x-api-key': apiSecret } : {}),
+      },
       body: JSON.stringify({
         reportId: report.id,
         title: title.trim(),
