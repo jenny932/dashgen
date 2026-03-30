@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
   async function signOut() {
     await supabase.auth.signOut()
-    router.push('/')
+    router.push('/login')
   }
 
   async function deleteReport(id: string) {
