@@ -37,39 +37,11 @@ export default function PreviewPage() {
       const data = await res.json()
       setReport(data)
       setLoading(false)
-      // If generating, trigger client-side generation and poll for result
+      // Poll while AI is still generating (generation is handled by external server)
       if (data.status === 'generating') {
         setGenerating(true)
-        generateAsync(data)
+        setTimeout(fetchReport, 3000)
       } else {
-        setGenerating(false)
-      }
-    }
-
-    async function generateAsync(reportData: any) {
-      try {
-        const res = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            reportId: reportData.id,
-            title: reportData.title,
-            description: reportData.description || '',
-            reportType: reportData.report_type,
-            theme: reportData.theme,
-            metrics: reportData.metrics || [],
-          }),
-        })
-        if (res.ok) {
-          // Refresh report to get the result
-          const updated = await fetch(`/api/reports/${id}`)
-          const data = await updated.json()
-          setReport(data)
-          setGenerating(false)
-        } else {
-          setGenerating(false)
-        }
-      } catch {
         setGenerating(false)
       }
     }

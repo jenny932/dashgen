@@ -97,8 +97,9 @@ export default function GeneratePage() {
       return
     }
 
-    // Call AI generation API (synchronous)
-    const res = await fetch('/api/generate', {
+    // Call AI generation API (runs on external server to bypass Cloudflare timeout)
+    const genApiUrl = process.env.NEXT_PUBLIC_GENERATION_API_URL || '/api/generate'
+    const res = await fetch(genApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
