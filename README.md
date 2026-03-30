@@ -348,3 +348,5 @@ No code changes needed — the adapter in `lib/ai.ts` handles all providers.
 | Google | Gemini 1.5 Pro | ~$5–10 |
 
 With Pro plan at $19/month × 50 gens/user, margin is healthy at any provider.
+
+<!-- Build: 2026-03-30 -->
