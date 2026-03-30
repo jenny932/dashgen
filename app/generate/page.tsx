@@ -97,8 +97,8 @@ export default function GeneratePage() {
       return
     }
 
-    // Call AI generation API
-    const res = await fetch('/api/generate', {
+    // Trigger async generation — redirect immediately, preview page will poll for result
+    fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -110,19 +110,9 @@ export default function GeneratePage() {
         metrics,
         refImageUrl,
       }),
-    })
+    }).catch(() => {})
 
-    if (!res.ok) {
-      const err = await res.json()
-      setError(err.error || 'Generation failed. Please try again.')
-      await supabase.from('reports').update({ status: 'error' }).eq('id', report.id)
-      setGenerating(false)
-      return
-    }
-
-    // Increment usage counter
-    await supabase.rpc('increment_generations', { user_id: userId })
-
+    // Redirect to preview immediately — no await
     router.push(`/preview/${report.id}`)
   }
 

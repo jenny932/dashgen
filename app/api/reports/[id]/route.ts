@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseFromRequest } from '@/lib/supabase-server'
+import { triggerGeneration } from '@/app/api/generate/route'
 
 export const runtime = 'edge'
 
@@ -9,15 +10,22 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data, error } = await supabase
+  const { data: report, error } = await supabase
     .from('reports')
     .select('*')
     .eq('id', id)
     .or(`user_id.eq.${user.id},is_public.eq.true`)
     .single()
 
-  if (error || !data) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return NextResponse.json(data)
+  if (error || !report) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  // Trigger async generation if status is 'generating'
+  if (report.status === 'generating') {
+    // Fire-and-forget: kick off generation in background
+    triggerGeneration(supabase, user.id, report).catch(console.error)
+  }
+
+  return NextResponse.json(report)
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

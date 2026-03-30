@@ -19,6 +19,7 @@ export default function PreviewPage() {
 
   const [report, setReport] = useState<Report | null>(null)
   const [loading, setLoading] = useState(true)
+  const [generating, setGenerating] = useState(false)
   const [copying, setCopying] = useState(false)
   const [showCode, setShowCode] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -27,12 +28,24 @@ export default function PreviewPage() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
+      await fetchReport()
+    }
 
-      const { data } = await supabase.from('reports').select('*').eq('id', id).single()
-      if (!data) { router.push('/dashboard'); return }
+    async function fetchReport() {
+      const res = await fetch(`/api/reports/${id}`)
+      if (!res.ok) { router.push('/dashboard'); return }
+      const data = await res.json()
       setReport(data)
       setLoading(false)
+      // Keep polling while AI is generating
+      if (data.status === 'generating' || data.status === 'generating_async') {
+        setGenerating(true)
+        setTimeout(fetchReport, 3000)
+      } else {
+        setGenerating(false)
+      }
     }
+
     load()
   }, [id])
 
