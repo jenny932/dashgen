@@ -1,19 +1,20 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   BarChart3, ArrowLeft, Plus, X, Upload, Sparkles,
-  Loader2, ImageIcon, ChevronDown, ChevronUp, Lightbulb
+  Loader2, ChevronDown, ChevronUp, Lightbulb
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { Metric, ReportType, Theme } from '@/types'
 import { REPORT_TYPES, METRIC_SUGGESTIONS } from '@/lib/utils'
 import { v4 as uuid } from 'uuid'
 
+export const dynamic = 'force-dynamic'
+
 export default function GeneratePage() {
   const router = useRouter()
-  const params = useSearchParams()
   const supabase = createClient()
   const fileRef = useRef<HTMLInputElement>(null)
 
