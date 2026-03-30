@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseFromRequest } from '@/lib/supabase-server'
-import { triggerGeneration } from '@/app/api/generate/route'
+import { triggerGeneration } from '@/lib/generation'
 
 export const runtime = 'edge'
 
